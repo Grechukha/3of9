@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,15 +8,88 @@ public class Player : MonoBehaviour
     [SerializeField] private int _level;
 
     private int _firstCurrencyCount = 250;
-    private int _secondCurrency;
+    private int _secondCurrencyCount;
+    private int _firstMaterialCount;
+    private int _secondMaterialCount;
+    private int _thirdMaterialCount;
+    private int _firstSpellCount;
+    private int _secondSpellCount;
+    private int _thirdSpellCount;
 
-    public int SecondCurrencyCount { get; set; }
-    public int FirstMaterialCount { get; set; }
-    public int SecondMaterialCount { get; set; }
-    public int ThirdMaterialCount { get; set; }
-    public int FirstSpellCount { get; set; }
-    public int SecondSpellCount { get; set; }
-    public int ThirdSpellCount { get; set; }
+    public event Action PropertiesChanged;
+
+    public int FirstCurrencyCount
+    {
+        get => _firstCurrencyCount;
+        set
+        {
+            _firstCurrencyCount = value;
+            PropertiesChanged.Invoke();
+        }
+    }
+    public int SecondCurrencyCount
+    {
+        get => _secondCurrencyCount;
+        set
+        {
+            _secondCurrencyCount = value;
+            PropertiesChanged.Invoke();
+        }
+    }
+    public int FirstMaterialCount
+    {
+        get => _firstMaterialCount;
+        set
+        {
+            _firstMaterialCount = value;
+            PropertiesChanged.Invoke();
+        }
+    }
+    public int SecondMaterialCount
+    {
+        get => _secondMaterialCount;
+        set
+        {
+            _secondMaterialCount = value;
+            PropertiesChanged.Invoke();
+        }
+    }
+    public int ThirdMaterialCount
+    {
+        get => _thirdMaterialCount;
+        set
+        {
+            _thirdMaterialCount = value;
+            PropertiesChanged.Invoke();
+        }
+    }
+    public int FirstSpellCount
+    {
+        get => _firstSpellCount;
+        set
+        {
+            _firstSpellCount = value;
+            PropertiesChanged.Invoke();
+        }
+    }
+    public int SecondSpellCount
+    {
+        get => _secondSpellCount;
+        set
+        {
+            _secondSpellCount = value;
+            PropertiesChanged.Invoke();
+        }
+    }
+    public int ThirdSpellCount
+    {
+        get => _thirdSpellCount;
+        set
+        {
+            _thirdSpellCount = value;
+            PropertiesChanged.Invoke();
+        }
+    }
 
     public int Level
     {
@@ -23,5 +97,5 @@ public class Player : MonoBehaviour
         {
             return _level;
         }
-    } 
+    }
 }
