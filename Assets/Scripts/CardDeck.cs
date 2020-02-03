@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -7,14 +8,21 @@ public class CardDeck : MonoBehaviour
     [SerializeField] private Player _player;
 
     private List<Card> _cards = new List<Card>();
-    private float _sideInterval = 200;
-    private float _topInterval = 180;
+    private System.Random _random = new System.Random();
+    private int _sideInterval = 200;
+    private int _topInterval = 180;
     private int _maxColumnsCount = 3;
+    private int _shuffleNumber = 4;
+    private int _shuffleNumberOriginal;
+    private float _shuffleTime = 0.35f;
+    private bool _isMovingCards = false;
 
     public event Action<Card> CardSelected;
 
     private void Start()
     {
+        _shuffleNumberOriginal = _shuffleNumber;
+
         foreach (var card in gameObject.GetComponentsInChildren<Card>())
         {
             card.Init(_player);
@@ -22,7 +30,6 @@ public class CardDeck : MonoBehaviour
             _cards.Add(card);
         }
 
-        ShuffleCards();
         DealCards();
     }
 
@@ -37,24 +44,59 @@ public class CardDeck : MonoBehaviour
     public void ShuffleCards()
     {
         var shuffledCards = new List<Card>();
-        var random = new System.Random();
+
+        HideCards();
 
         foreach (var card in _cards)
         {
-            int j = random.Next(shuffledCards.Count + 1);
-            
-            if (j == shuffledCards.Count)
+            int i = _random.Next(shuffledCards.Count + 1);
+
+            if (i == shuffledCards.Count)
             {
                 shuffledCards.Add(card);
             }
             else
             {
-                shuffledCards.Add(shuffledCards[j]);
-                shuffledCards[j] = card;
+                shuffledCards.Add(shuffledCards[i]);
+                shuffledCards[i] = card;
             }
         }
 
         _cards = shuffledCards;
+
+        _isMovingCards = true;
+
+        StartCoroutine(MoveCards());
+    }
+
+    private IEnumerator MoveCards()
+    {
+        while(_shuffleNumber > 0)
+        {
+            if (_shuffleNumber % 2 == 0 )
+            {
+                foreach (var card in _cards)
+                {
+                    var pointInCircle = UnityEngine.Random.insideUnitCircle * _topInterval;
+                    card.TargetPosition = new Vector3(pointInCircle.x, 0, pointInCircle.y);
+                }
+            }
+            else
+            {
+                CollectCards();
+            }
+           
+            _shuffleNumber--;
+
+            yield return new WaitForSeconds(_shuffleTime);
+        }
+
+        DealCards();
+
+        yield return new WaitForSeconds(_shuffleTime);
+
+        _shuffleNumber = _shuffleNumberOriginal;
+        _isMovingCards = false;
     }
 
     public void DealCards()
@@ -81,7 +123,15 @@ public class CardDeck : MonoBehaviour
             }
         }
     }
-   
+
+    public void CollectCards()
+    {
+        foreach (var card in _cards)
+        {
+            card.TargetPosition = new Vector3(0, card.transform.position.y, 0);
+        }
+    }
+
     public void ShowCards()
     {
         foreach (var card in _cards)
@@ -100,6 +150,9 @@ public class CardDeck : MonoBehaviour
 
     private void OnCardSelected(Card card)
     {
-        CardSelected?.Invoke(card);
+        if (_isMovingCards != true)
+        {
+            CardSelected?.Invoke(card);
+        }
     }
 }

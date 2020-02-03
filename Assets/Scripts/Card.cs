@@ -36,12 +36,12 @@ public class Card : MonoBehaviour
 
     public void Show()
     {
-        transform.rotation = new Quaternion(0f, 0f, 0f, 0f);
+        transform.localRotation = new Quaternion(0f, 0f, 0f, 0f);
     }
   
     public void Hide()
     {
-        transform.rotation = new Quaternion(0f, 180f, 0f, 0f);
+        transform.localRotation = new Quaternion(0f, 180f, 0f, 0f);
     }
 
     public virtual void RewardPlayer()
