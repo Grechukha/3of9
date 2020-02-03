@@ -10,11 +10,11 @@ public class Card : MonoBehaviour
 
     protected Player _player;
 
-    public event Action<Card> CardSelected; 
+    public event Action<Card> Selected; 
 
     private void OnMouseDown()
     {
-        CardSelected.Invoke(this);
+        Selected.Invoke(this);
     }
 
     public void Init(Player player)
