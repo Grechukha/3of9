@@ -69,36 +69,6 @@ public class CardDeck : MonoBehaviour
         StartCoroutine(MoveCards());
     }
 
-    private IEnumerator MoveCards()
-    {
-        while(_shuffleNumber > 0)
-        {
-            if (_shuffleNumber % 2 == 0 )
-            {
-                foreach (var card in _cards)
-                {
-                    var pointInCircle = UnityEngine.Random.insideUnitCircle * _topInterval;
-                    card.TargetPosition = new Vector3(pointInCircle.x, card.transform.position.y, pointInCircle.y);
-                }
-            }
-            else
-            {
-                CollectCards();
-            }
-           
-            _shuffleNumber--;
-
-            yield return new WaitForSeconds(_shuffleTime);
-        }
-
-        DealCards();
-
-        yield return new WaitForSeconds(_shuffleTime);
-
-        _shuffleNumber = _shuffleNumberOriginal;
-        _isMovingCards = false;
-    }
-
     public void DealCards()
     {
         Vector3 newPosition = new Vector3(-_sideInterval, 0, _topInterval);
@@ -147,6 +117,37 @@ public class CardDeck : MonoBehaviour
             card.Hide();
         }
     }
+
+    private IEnumerator MoveCards()
+    {
+        while (_shuffleNumber > 0)
+        {
+            if (_shuffleNumber % 2 == 0)
+            {
+                foreach (var card in _cards)
+                {
+                    var pointInCircle = UnityEngine.Random.insideUnitCircle * _topInterval;
+                    card.TargetPosition = new Vector3(pointInCircle.x, card.transform.position.y, pointInCircle.y);
+                }
+            }
+            else
+            {
+                CollectCards();
+            }
+
+            _shuffleNumber--;
+
+            yield return new WaitForSeconds(_shuffleTime);
+        }
+
+        DealCards();
+
+        yield return new WaitForSeconds(_shuffleTime);
+
+        _shuffleNumber = _shuffleNumberOriginal;
+        _isMovingCards = false;
+    }
+
 
     private void OnCardSelected(Card card)
     {
