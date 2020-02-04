@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class Player : MonoBehaviour
 {
-    [SerializeField] private int _level;
+    [SerializeField] private int _level = 1;
 
     private int _firstCurrencyCount = 250;
     private int _secondCurrencyCount;
@@ -98,5 +98,11 @@ public class Player : MonoBehaviour
             _level = value;
             LevelChanged.Invoke();
         }
+    }
+
+    private void Start()
+    {
+        PropertiesChanged.Invoke();
+        LevelChanged.Invoke();
     }
 }

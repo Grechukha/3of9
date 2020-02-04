@@ -9,7 +9,7 @@ public class GameState : MonoBehaviour
 
     private int _maxFreeOpeningsNumber = 3;
     private int _openingsNumber = 0;
-    private bool _isShuffleNeeded = true;
+    private States _gameState;
 
     private void OnEnable()
     {
@@ -23,19 +23,36 @@ public class GameState : MonoBehaviour
 
     private void Start()
     {
-        _cardDeck.DealCards();
+        _gameState = States.ShowingCards;
     }
 
     private void OnCardSelected(Card card)
     {
-        if (_isShuffleNeeded)
+        if (_gameState == States.ShowingCards)
         {
-            _cardDeck.ShuffleCards();
-            _isShuffleNeeded = false;
+            _gameState = States.ShufflingCards;
+
+            _cardDeck.ShowCards();
+            _cardDeck.DealCards();
+
+            SetRandomPlayerLevel();
         }
-        else
+        else if (_gameState == States.ShufflingCards)
+        {
+            _gameState = States.SelectionCards;
+
+            _cardDeck.ShuffleCards();
+        }
+        else if (_gameState == States.SelectionCards)
         {
             TryOpenCard(card);
+        }
+        else if (_gameState == States.CollectedCards)
+        {
+            _cardDeck.HideCards();
+            _cardDeck.CollectCards();
+
+            _gameState = States.ShowingCards;
         }
     }
 
@@ -66,9 +83,8 @@ public class GameState : MonoBehaviour
         if (_openingsNumber >= _maxFreeOpeningsNumber + 2)
         {
             _openingsNumber = 0;
-            _isShuffleNeeded = true;
 
-            SetRandomPlayerLevel();
+            _gameState = States.CollectedCards;
         }
     }
 
@@ -95,5 +111,13 @@ public class GameState : MonoBehaviour
     private void SetRandomPlayerLevel()
     {
         _player.Level = new System.Random().Next(1, 10);
+    }
+
+    private enum States
+    {
+        ShowingCards,
+        ShufflingCards,
+        SelectionCards,
+        CollectedCards
     }
 }

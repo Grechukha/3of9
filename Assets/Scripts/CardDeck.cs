@@ -30,7 +30,7 @@ public class CardDeck : MonoBehaviour
             _cards.Add(card);
         }
 
-        DealCards();
+        HideCards();
     }
 
     private void OnDisable()
