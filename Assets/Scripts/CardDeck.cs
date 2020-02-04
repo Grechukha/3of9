@@ -78,7 +78,7 @@ public class CardDeck : MonoBehaviour
                 foreach (var card in _cards)
                 {
                     var pointInCircle = UnityEngine.Random.insideUnitCircle * _topInterval;
-                    card.TargetPosition = new Vector3(pointInCircle.x, 0, pointInCircle.y);
+                    card.TargetPosition = new Vector3(pointInCircle.x, card.transform.position.y, pointInCircle.y);
                 }
             }
             else

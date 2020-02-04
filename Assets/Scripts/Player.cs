@@ -15,6 +15,7 @@ public class Player : MonoBehaviour
     private int _thirdSpellCount;
 
     public event Action PropertiesChanged;
+    public event Action LevelChanged;
 
     public int FirstCurrencyCount
     {
@@ -91,9 +92,11 @@ public class Player : MonoBehaviour
 
     public int Level
     {
-        get
+        get => _level;
+        set
         {
-            return _level;
+            _level = value;
+            LevelChanged.Invoke();
         }
     }
 }

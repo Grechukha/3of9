@@ -14,6 +14,7 @@ public class Card : MonoBehaviour
     public event Action<Card> Selected; 
 
     public Vector3 TargetPosition { get; set; }
+    public bool IsOpen { get; private set; }
 
     private void Update()
     {
@@ -28,20 +29,29 @@ public class Card : MonoBehaviour
         Selected.Invoke(this);
     }
 
+    private void OnDisable()
+    {
+        _player.LevelChanged -= OnLevelChanged;
+    }
+
     public void Init(Player player)
     {
         _player = player;
+        _player.LevelChanged += OnLevelChanged;
+
         WriteCardParameters();
     }
 
     public void Show()
     {
         transform.localRotation = new Quaternion(0f, 0f, 0f, 0f);
+        IsOpen = true;
     }
   
     public void Hide()
     {
         transform.localRotation = new Quaternion(0f, 180f, 0f, 0f);
+        IsOpen = false;
     }
 
     public virtual void RewardPlayer()
@@ -62,5 +72,10 @@ public class Card : MonoBehaviour
     protected virtual string GetAwardName()
     {
         return "Award Type";
+    }
+
+    private void OnLevelChanged()
+    {
+        _awardAmountText.text = GetAwardAmount().ToString();
     }
 }

@@ -12,16 +12,19 @@ public class PlayerPropertiesDisplay : MonoBehaviour
     [SerializeField] private TextMeshProUGUI _firstSpellCountText;
     [SerializeField] private TextMeshProUGUI _secondSpellCountText;
     [SerializeField] private TextMeshProUGUI _thirdSpellCountText;
+    [SerializeField] private TextMeshProUGUI _levelText;
 
     private void OnEnable()
     {
         _player.PropertiesChanged += OnPropertiesChanged;
+        _player.LevelChanged += OnLevelChanged;
         OnPropertiesChanged();
     }
 
     private void OnDisable()
     {
         _player.PropertiesChanged -= OnPropertiesChanged;
+        _player.LevelChanged -= OnLevelChanged;
     }
 
     private void OnPropertiesChanged()
@@ -34,5 +37,10 @@ public class PlayerPropertiesDisplay : MonoBehaviour
         _firstSpellCountText.text = _player.FirstSpellCount.ToString();
         _secondSpellCountText.text = _player.SecondSpellCount.ToString();
         _thirdSpellCountText.text = _player.ThirdSpellCount.ToString();
+    }
+
+    private void OnLevelChanged()
+    {
+        _levelText.text = _player.Level.ToString();
     }
 }
