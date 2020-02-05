@@ -7,7 +7,8 @@ public class Card : MonoBehaviour
     [SerializeField] protected TextMeshPro _awardTypeText;
     [SerializeField] protected TextMeshPro _awardAmountText;
     [SerializeField] protected int _awardAmount;
-    [SerializeField] private float _speed = 300;
+
+    private float _speed = 50;
 
     protected Player _player;
 
@@ -27,6 +28,14 @@ public class Card : MonoBehaviour
     private void OnMouseDown()
     {
         Selected.Invoke(this);
+    }
+
+    private void OnEnable()
+    {
+        if (_player != null)
+        {
+            _player.LevelChanged += OnLevelChanged;
+        }
     }
 
     private void OnDisable()
@@ -50,7 +59,7 @@ public class Card : MonoBehaviour
   
     public void Hide()
     {
-        transform.localRotation = new Quaternion(0f, 180f, 0f, 0f);
+        transform.localRotation = new Quaternion(0f, 0f, 180f, 0f);
         IsOpen = false;
     }
 

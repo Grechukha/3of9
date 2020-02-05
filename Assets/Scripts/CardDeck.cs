@@ -9,10 +9,10 @@ public class CardDeck : MonoBehaviour
 
     private List<Card> _cards = new List<Card>();
     private System.Random _random = new System.Random();
-    private int _sideInterval = 200;
-    private int _topInterval = 180;
+    private int _sideInterval = 10;
+    private int _topInterval = 10;
     private int _maxColumnsCount = 3;
-    private int _shuffleNumber = 4;
+    private int _shuffleNumber = 6;
     private int _shuffleNumberOriginal;
     private float _shuffleTime = 0.35f;
     private bool _isMovingCards = false;
