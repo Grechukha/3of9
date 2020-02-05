@@ -11,6 +11,14 @@ public class GameState : MonoBehaviour
     private int _openingsNumber = 0;
     private States _gameState;
 
+    private enum States
+    {
+        ShowingCards,
+        ShufflingCards,
+        SelectionCards,
+        CollectedCards
+    }
+
     private void OnEnable()
     {
         _cardDeck.CardSelected += OnCardSelected;
@@ -70,6 +78,10 @@ public class GameState : MonoBehaviour
                 {
                     OpenCard(card);
                 }
+                else
+                {
+                    EndGame();
+                }
             }
             else if (_openingsNumber == _maxFreeOpeningsNumber + 1)
             {
@@ -77,15 +89,24 @@ public class GameState : MonoBehaviour
                 {
                     OpenCard(card);
                 }
+                else
+                {
+                    EndGame();
+                }
             }
         }
 
         if (_openingsNumber >= _maxFreeOpeningsNumber + 2)
         {
-            _openingsNumber = 0;
-
-            _gameState = States.CollectedCards;
+            EndGame();
         }
+    }
+
+    private void EndGame()
+    {
+        _openingsNumber = 0;
+
+        _gameState = States.CollectedCards;
     }
 
     private void OpenCard(Card card)
@@ -111,13 +132,5 @@ public class GameState : MonoBehaviour
     private void SetRandomPlayerLevel()
     {
         _player.Level = new System.Random().Next(1, 10);
-    }
-
-    private enum States
-    {
-        ShowingCards,
-        ShufflingCards,
-        SelectionCards,
-        CollectedCards
     }
 }
